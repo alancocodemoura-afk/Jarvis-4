@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>JARVIS AI Console</title>
+    <style>
+        body { background: #000; color: #00ff41; font-family: 'Courier New', Courier, monospace; padding: 20px; }
+        .console { max-width: 800px; margin: auto; border: 1px solid #00ff41; padding: 20px; border-radius: 5px; }
+        h1 { text-transform: uppercase; letter-spacing: 3px; font-size: 1.2rem; }
+        input { background: #111; border: 1px solid #00ff41; color: #00ff41; padding: 10px; width: 70%; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px; cursor: pointer; font-weight: bold; margin: 5px; }
+        img { width: 100%; margin-top: 20px; border: 1px solid #00ff41; display: none; }
+        .controls { margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="console">
+    <h1>[SYSTEM] JARVIS VISUAL CORE</h1>
+    <p>> Protocolo de síntesis activado.</p>
+    
+    <input type="text" id="prompt" placeholder="Comando visual...">
+    <button onclick="ejecutarComando()">EJECUTAR</button>
+
+    <div id="pantalla">
+        <img id="visor" src="" alt="Resultado">
+        <div class="controls">
+            <button id="btnDownload" style="display:none;" onclick="descargarImagen()">DESCARGAR IMAGEN</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function ejecutarComando() {
+        const prompt = document.getElementById('prompt').value;
+        const visor = document.getElementById('visor');
+        const btn = document.getElementById('btnDownload');
+        
+        const seed = Math.floor(Math.random() * 10000);
+        const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=1024&height=1024&seed=${seed}&nologo=true`;
+        
+        visor.src = url;
+        visor.style.display = 'block';
+        btn.style.display = 'inline-block';
+    }
+
+    async function descargarImagen() {
+        const imageSrc = document.getElementById('visor').src;
+        const response = await fetch(imageSrc);
+const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'jarvis-creacion.jpg';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
+</script>
+</body>
+</html>
